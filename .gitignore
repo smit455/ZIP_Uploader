@@ -1,0 +1,25 @@
+# Node
+node_modules/
+dist/
+
+# Environment
+.env
+.env.*
+
+# PHP
+vendor/
+
+# Upload storage
+backend/storage/
+storage/
+
+# Logs
+*.log
+
+# OS
+.DS_Store
+Thumbs.db
+
+# IDE
+.vscode/
+.idea/

@@ -1,0 +1,22 @@
+CREATE TABLE IF NOT EXISTS uploads (
+    id BIGINT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+    file_key CHAR(64) NOT NULL UNIQUE,
+    filename VARCHAR(255) NOT NULL,
+    total_size BIGINT UNSIGNED NOT NULL,
+    total_chunks INT UNSIGNED NOT NULL,
+    status ENUM('UPLOADING','PROCESSING','COMPLETED','FAILED') NOT NULL DEFAULT 'UPLOADING',
+    final_hash CHAR(64) NULL,
+    zip_entries JSON NULL,
+    created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    INDEX idx_uploads_status_updated (status, updated_at)
+);
+
+CREATE TABLE IF NOT EXISTS chunks (
+    upload_id BIGINT UNSIGNED NOT NULL,
+    chunk_index INT UNSIGNED NOT NULL,
+    status ENUM('UPLOADING','SUCCESS','ERROR') NOT NULL DEFAULT 'UPLOADING',
+    received_at TIMESTAMP NULL,
+    PRIMARY KEY (upload_id, chunk_index),
+    CONSTRAINT fk_chunks_upload FOREIGN KEY (upload_id) REFERENCES uploads(id) ON DELETE CASCADE
+);
